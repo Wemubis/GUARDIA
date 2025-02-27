@@ -1,0 +1,34 @@
+---
+- name: Delete user and password file
+  hosts: linux:windows
+
+  tasks:
+    - name: Delete linux user
+      when: ansible_name in groups['linux']
+      user:
+        name: "{{ username }}"
+        state: absent
+
+    - name: Delete windows user
+      when: ansible_name in groups['windows']
+      win_user:
+        name: "{{ username }}"
+        state: absent
+
+    - name: Decrypt vault file
+      delegate_to: localhost
+      command: "bash /root/create_vault.sh -d"
+      ignore_errors: true
+
+    - name: Create or update secrets.yml file
+      delegate_to: localhost
+      lineinfile:
+        dest: "{{ secret_file }}"
+        regexp: "^{{ ansible_name }};"
+        line: "null;null;null"
+        state: present
+
+    - name: Encrypt vault file
+      delegate_to: localhost
+      command: "bash /root/create_vault.sh -e"
+      ignore_errors: true

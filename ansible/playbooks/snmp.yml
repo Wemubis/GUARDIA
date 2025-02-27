@@ -1,0 +1,50 @@
+---
+- name: Install SNMP on AlmaLinux
+  hosts: linux
+  gather_facts: yes
+
+  tasks:
+    - name: Install SNMP packages
+      dnf:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - net-snmp
+        - net-snmp-utils
+
+    - name: Generate SNMPd configuration file
+      template:
+        src: l_snmpd.conf.j2
+        dest: /etc/snmp/snmpd.conf
+
+    - name: Restart SNMP service
+      service:
+        name: snmpd
+        state: restarted
+        enabled: yes
+
+- name: Install and configure SNMP on a Windows machine
+  hosts: windows
+  gather_facts: yes
+
+  tasks:
+    - name: Install SNMP
+      win_feature:
+        name: "{{ item }}"
+        state: present
+      loop:
+      - SNMP-Service
+      - rsat-snmp
+
+    - name: Configure SNMP
+      win_snmp:
+        community_strings:
+          - "{{ snmp_community }}"
+        permitted_managers:
+          - "{{ groups['central'][0] }}"
+        action: set
+
+    - name: Restart SNMP service
+      win_service:
+        name: snmp
+        state: restarted
