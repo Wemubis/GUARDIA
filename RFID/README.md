@@ -20,7 +20,7 @@ The communication between the database and the ESP8266 occurs via WiFi.
 
 #### 4) Circuit Diagram:
 
-![Circuit diagram](https://github.com/SebastienCherki/Projet-4-RFID/blob/main/dependencies/Schema_ESP32_RC522.png)
+![Circuit diagram](./dependencies/Schema_ESP32_RC522.png)
 
 <br>
 
