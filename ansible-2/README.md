@@ -3,6 +3,29 @@
 ## Project Overview
 This project provides an automated way to deploy and configure a small-scale cybersecurity lab using Ansible. It includes VyOS router configuration, OPNsense firewall rules, and proxy server setup. The infrastructure aims to simulate a real-world enterprise network with DMZ, LAN, and administrative zones.
 
+Structure:
+```
+project-ansible/
+├── inventory/
+│   └── hosts
+├── roles/
+│   ├── ip/
+│   │   └── tasks/main.yml
+│   ├── static/
+│   │   └── tasks/main.yml
+│   ├── vlan_dhcp/
+│   │   └── tasks/main.yml
+│   ├── opnsense/
+│   │   └── tasks/main.yml
+│   ├── ids/
+│   │   └── tasks/main.yml
+│   └── proxy/
+│       └── tasks/main.yml
+├── playbooks.yml
+└── ansible.cfg
+.secret/opn.key
+```
+
 ### Technologies Used
 - Ansible
 - VyOS
