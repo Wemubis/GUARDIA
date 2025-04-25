@@ -1,0 +1,10 @@
+---
+- name: Configure default static route on VyOS + NAT rule 10 from eth3
+  tags: static
+  vyos_config:
+    lines:
+      - set protocols static route 0.0.0.0/0 next-hop {{ wan_gateway }}
+      - set nat source rule {{ nat_rule_id }} outbound-interface name {{ nat_out_interface }}
+      - set nat source rule {{ nat_rule_id }} source address {{ nat_source_subnet }}
+      - set nat source rule {{ nat_rule_id }} translation address masquerade
+    save: true

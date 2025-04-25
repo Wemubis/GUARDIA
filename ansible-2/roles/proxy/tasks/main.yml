@@ -1,0 +1,11 @@
+---
+- name: Install squid
+  apt:
+    name: squid
+    state: present
+
+- name: Start service
+  service:
+    name: squid
+    state: started
+    enabled: true

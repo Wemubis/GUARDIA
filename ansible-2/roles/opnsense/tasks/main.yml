@@ -1,0 +1,114 @@
+---
+- name: Block all traffic from DMZ (Metasploit - Zone_DMZ_2 / OPT2) to anywhere
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.3.0/24'
+    destination_net: 'any'
+    protocol: 'any'
+    description: 'Block Metasploit DMZ traffic to OPNsense'
+    action: 'block'
+    quick: true
+    interface: 'opt2'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false
+
+- name: Admin/DMZ_1/DMZ_2 -> metasploitable
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.1.1'
+    destination_net: '192.168.3.2'
+    protocol: 'tcp/udp'
+    description: 'Admin vers metasploitable (192.168.3.2)'
+    action: 'pass'
+    interface: 'lan'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    ports: [22, 53, 80, 443]
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false
+
+- name: DMZ_1 -> Web Proxy
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.2.1'
+    destination_net: '192.168.2.5'
+    protocol: 'tcp/udp'
+    description: 'DMZ_1 vers Web Proxy'
+    action: 'pass'
+    interface: 'lan'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    ports: [22, 53, 80, 443]
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false
+
+- name: Web Proxy -> DMZ_1 (à filtrer)
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.2.5'
+    destination_net: '192.168.2.1'
+    protocol: 'tcp/udp'
+    description: 'Web Proxy vers DMZ_1 (à filtrer)'
+    action: 'pass'
+    interface: 'lan'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    ports: [22, 53, 80, 443]
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false
+
+- name: DMZ_1 -> VyOS
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.2.1'
+    destination_net: '192.168.2.2'
+    protocol: 'tcp/udp'
+    description: 'DMZ_1 vers VyOS'
+    action: 'pass'
+    interface: 'lan'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    ports: [22, 53]
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false
+
+- name: VyOS -> DMZ_1
+  tags: opnsense
+  ansibleguy.opnsense.rule:
+    source_net: '192.168.2.2'
+    destination_net: '192.168.2.1'
+    protocol: 'tcp/udp'
+    description: 'VyOS vers DMZ_1'
+    action: 'pass'
+    interface: 'lan'
+    direction: 'in'
+    ip_protocol: 'inet'
+    log: true
+    match_fields: ['description']
+    ports: [22, 53, 80, 443]
+    state: 'present'
+    enabled: true
+    reload: true
+    ssl_verify: false

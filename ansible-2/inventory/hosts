@@ -1,0 +1,19 @@
+[host]
+proxy ansible_host=192.168.2.5 ansible_connection=ssh ansible_user=proxy1
+vyos ansible_host=192.168.4.1 ansible_connection=network_cli ansible_network_os=vyos ansible_user=vyos
+localhost ansible_connection=local
+
+[host:vars]
+ansible_ssh_private_key_file=/home/ansible/.ssh/id_rsa
+
+wan_gateway=192.168.2.1
+nat_rule_id=10
+nat_out_interface=eth0
+nat_source_subnet='192.168.4.0/24'
+
+wan_int=eth0
+admin_int=eth3
+eth0_ip=dhcp
+eth3_ip='192.168.4.1/24'
+vlan_int=eth2
+vlans=[{"id": 10, "name": "VLAN-COMPTA", "ip": "192.168.5.1/24", "network": "192.168.5.0/24", "dhcp_start": "192.168.5.2", "dhcp_end": "192.168.5.12"}, {"id": 20, "name": "VLAN-STAGIAIRE", "ip": "192.168.6.1/24", "network": "192.168.6.0/24", "dhcp_start": "192.168.6.2", "dhcp_end": "192.168.6.12"}]

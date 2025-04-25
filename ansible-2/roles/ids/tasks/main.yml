@@ -1,0 +1,8 @@
+---
+- name: Enable ids
+  tags: ids
+  ansibleguy.opnsense.ids_general:
+    interfaces: ['wan']
+    firewall: '192.168.2.1'
+    api_credential_file: /home/ansible/.secret/opn.key
+    ssl_verify: false

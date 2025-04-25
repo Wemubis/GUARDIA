@@ -1,0 +1,8 @@
+---
+- name: Set DHCP on eth0 + eth3 statique
+  tags: ip
+  vyos.vyos.vyos_config:
+    lines:
+      - set interfaces ethernet {{ wan_int }} address {{ eth0_ip }}
+      - set interfaces ethernet {{ admin_int }} address {{ eth3_ip }}
+    save: true
